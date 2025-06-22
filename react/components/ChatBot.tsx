@@ -1,14 +1,14 @@
 // ChatBot.tsx
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import ChatSidebar from './ChatSidebar'
 import ChatHeader from './ChatHeader'
 import ChatInterface from './ChatInterface'
 import BotTypingMessage from './BotTypingMessage'
-import { markdownToHTML } from '../utils/markdownUtils'
-import { extractMermaidCode } from '../utils/diagramUtils'
 import DiagramSection from './DiagramSection'
-import type { Message, ChatHistory } from '../types'
+import { markdownToHTML } from '../utils/markdownUtils'
+import type { Message, ChatHistory, DiagramData } from '../types'
+import { extractDiagramJson } from '../utils/parseUtils'
 
 const ChatBot = () => {
   const [input, setInput] = useState('')
@@ -18,8 +18,8 @@ const ChatBot = () => {
   const [chatHistories, setChatHistories] = useState<ChatHistory[]>([])
   const [activeChatId, setActiveChatId] = useState<string | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [showLawyers, setShowLawyers] = useState(false)
-  const [diagram, setDiagram] = useState<any>(null)
+  const [showLawyers, setShowLawyers] = useState<boolean>(false)
+  const [diagram, setDiagram] = useState<DiagramData | null>(null)
 
   useEffect(() => {
     let storedId = localStorage.getItem('sessionId')
@@ -31,7 +31,7 @@ const ChatBot = () => {
 
     const mockHistories: ChatHistory[] = [
       { id: 'hist1', title: 'Tư vấn hợp đồng thuê nhà', date: new Date(2023, 5, 15) },
-      { id: 'hist2', title: 'Vấn đề tranh chấp đất đai', date: new Date(2023, 6, 22) },
+      { id: 'hist2', title: 'Tranh chấp đất đai', date: new Date(2023, 6, 22) },
       { id: 'hist3', title: 'Thủ tục ly hôn', date: new Date(2023, 7, 3) }
     ]
     setChatHistories(mockHistories)
@@ -65,27 +65,38 @@ const ChatBot = () => {
       })
 
       const data = await res.json()
+
+      let rawText = ''
       let diagramJson = null
-      let cleanText = data.output
+      let cleanText = ''
 
       try {
-        const match = data.output.match(/{\s*\"diagram\"\s*:[\s\S]*?}/)
-        if (match) {
-          diagramJson = JSON.parse(match[0])
-          cleanText = data.output.replace(match[0], '').trim()
-        }
+        const parsed = JSON.parse(data.output) // ✅ Đây là mấu chốt: parse string thành object
+
+        rawText = parsed.output || ''
+        diagramJson = parsed.diagram || null
+        cleanText = rawText.trim()
+
+        console.log('✅ Bot trả về text:', rawText)
+        console.log('📊 Parsed diagram:', diagramJson)
       } catch (err) {
-        console.warn('Lỗi parse sơ đồ:', err)
+        console.warn('❌ Không thể parse JSON từ bot:', err)
+        rawText = data.output || ''
+        cleanText = rawText.trim()
       }
 
-      const botReply: Message = {
-        from: 'bot',
-        text: cleanText,
-        timestamp: new Date()
-      }
-      setMessages((prev) => [...prev, botReply])
-      if (diagramJson) setDiagram(diagramJson)
+      setMessages((prev) => [
+        ...prev,
+        {
+          from: 'bot',
+          text: cleanText,
+          timestamp: new Date()
+        }
+      ])
 
+      setDiagram(diagramJson)
+
+      // Nếu đây là tin nhắn đầu tiên → tạo lịch sử mới
       if (messages.length <= 1) {
         const newChatId = uuidv4()
         const newChat: ChatHistory = {
@@ -97,7 +108,7 @@ const ChatBot = () => {
         setActiveChatId(newChatId)
       }
     } catch (err) {
-      console.error(err)
+      console.error('❌ Lỗi khi gửi hoặc xử lý phản hồi chatbot:', err)
       setMessages((prev) => [
         ...prev,
         { from: 'bot', text: '⚠️ Đã xảy ra lỗi khi gửi tin nhắn.', timestamp: new Date() }
@@ -108,8 +119,17 @@ const ChatBot = () => {
   }
 
   const formatDate = (date: Date) =>
-    date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
-  const formatTime = (date: Date) => date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+    date.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    })
+
+  const formatTime = (date: Date) =>
+    date.toLocaleTimeString('vi-VN', {
+      hour: '2-digit',
+      minute: '2-digit'
+    })
 
   return (
     <div className='flex flex-col h-screen bg-gray-900 text-white overflow-hidden'>
@@ -118,30 +138,40 @@ const ChatBot = () => {
           sidebarOpen={sidebarOpen}
           chatHistories={chatHistories}
           activeChatId={activeChatId}
-          showLawyers={showLawyers}
-          startNewChat={startNewChat}
+          startNewChat={() => setMessages([])}
           setActiveChatId={setActiveChatId}
-          toggleLawyersPanel={toggleLawyersPanel}
+          showLawyers={showLawyers}
+          toggleLawyersPanel={() => setShowLawyers(!showLawyers)}
           formatDate={formatDate}
         />
 
-        <div className='flex-1 flex flex-col h-full overflow-hidden'>
-          {/* Header */}
-          <ChatHeader toggleSidebar={toggleSidebar} sessionId={sessionId} />
+        <div className='flex flex-1 flex-row overflow-hidden'>
+          <div className='flex flex-col flex-1'>
+            <ChatHeader
+              toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+              sessionId={sessionId}
+              showLawyers={showLawyers}
+              toggleLawyersPanel={() => setShowLawyers(!showLawyers)}
+            />
+            <ChatInterface
+              messages={messages}
+              loading={loading}
+              input={input}
+              setInput={setInput}
+              handleSend={handleSend}
+              markdownToHTML={markdownToHTML}
+              formatTime={formatTime}
+              BotTypingMessage={BotTypingMessage}
+            />
+          </div>
 
-          <ChatInterface
-            messages={messages}
-            loading={loading}
-            input={input}
-            setInput={setInput}
-            handleSend={handleSend}
-            markdownToHTML={markdownToHTML}
-            formatTime={formatTime}
-            BotTypingMessage={BotTypingMessage}
-          />
+          {/* Diagram hiển thị khi có dữ liệu */}
+          {diagram && (
+            <div className='w-[400px] border-l border-gray-700 bg-gray-800'>
+              <DiagramSection diagramData={diagram} />
+            </div>
+          )}
         </div>
-
-        {diagram && <DiagramSection diagramData={diagram} />}
       </div>
     </div>
   )
