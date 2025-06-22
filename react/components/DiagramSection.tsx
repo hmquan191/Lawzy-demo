@@ -1,38 +1,43 @@
-import React, { useEffect, useRef } from 'react'
-import mermaid from 'mermaid'
+// components/DiagramSection.tsx
+
+import React from 'react'
+import ReactFlow, { Background, Controls, Edge, Node } from 'reactflow'
+import 'reactflow/dist/style.css'
+import type { DiagramData } from '../types'
 
 interface DiagramSectionProps {
-  mermaidCode: string | null
+  diagramData: DiagramData
 }
 
-const DiagramSection: React.FC<DiagramSectionProps> = ({ mermaidCode }) => {
-  const containerRef = useRef<HTMLDivElement>(null)
+const DiagramSection: React.FC<DiagramSectionProps> = ({ diagramData }) => {
+  if (!diagramData || diagramData.type !== 'flowchart') return null
 
-  useEffect(() => {
-    if (!mermaidCode || !containerRef.current) return
+  // Convert nodes
+  const nodes: Node[] = diagramData.nodes.map((node, index) => ({
+    id: node.id,
+    data: { label: node.label },
+    position: node.position || { x: 100, y: index * 100 },
+    type: 'default'
+  }))
 
-    try {
-      mermaid.initialize({ startOnLoad: false, theme: 'dark' })
-
-      mermaid.render('mermaid-diagram', mermaidCode).then(({ svg }) => {
-        if (containerRef.current) {
-          containerRef.current.innerHTML = svg
-        }
-      })
-    } catch (error) {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = '<p class="text-red-400">⚠️ Lỗi khi vẽ sơ đồ Mermaid.</p>'
-        console.error('Mermaid render error:', error)
-      }
-    }
-  }, [mermaidCode])
-
-  if (!mermaidCode) return null
+  // Convert edges
+  const edges: Edge[] = diagramData.edges.map((edge, idx) => ({
+    id: `e-${edge.from}-${edge.to}-${idx}`,
+    source: edge.from,
+    target: edge.to,
+    label: edge.label,
+    type: 'default'
+  }))
 
   return (
-    <div className='w-[420px] max-w-[100%] h-full p-4 border-l border-gray-700 bg-gray-950 overflow-auto'>
+    <div className='w-[400px] max-w-full h-full border-l border-gray-700 bg-gray-950 p-4 overflow-auto'>
       <h2 className='text-lg font-semibold text-white mb-3'>📊 Sơ đồ minh họa</h2>
-      <div ref={containerRef} className='overflow-x-auto max-h-full' />
+      <div style={{ height: '100%', minHeight: '500px' }}>
+        <ReactFlow nodes={nodes} edges={edges} fitView>
+          <Background />
+          <Controls />
+        </ReactFlow>
+      </div>
     </div>
   )
 }

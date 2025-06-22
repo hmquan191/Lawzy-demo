@@ -16,24 +16,24 @@ const BotTypingMessage: React.FC<BotTypingMessageProps> = ({
   formatTime
 }) => {
   const [displayed, setDisplayed] = useState<string>('')
-  
+
   useEffect(() => {
     if (showFull) {
       setDisplayed(text)
       return
     }
-    
+
     setDisplayed('')
     let i = 0
     const interval = setInterval(() => {
       setDisplayed(text.slice(0, i + 1))
       i++
       if (i >= text.length) clearInterval(interval)
-    }, 15)
-    
+    }, 0.1)
+
     return () => clearInterval(interval)
   }, [text, showFull])
-  
+
   return (
     <div>
       <div className='mb-1' dangerouslySetInnerHTML={{ __html: markdownToHTML(displayed) }} />
@@ -42,4 +42,4 @@ const BotTypingMessage: React.FC<BotTypingMessageProps> = ({
   )
 }
 
-export default BotTypingMessage 
+export default BotTypingMessage
