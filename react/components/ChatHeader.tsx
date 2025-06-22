@@ -1,11 +1,14 @@
 import React from 'react'
+import LawyerConnect from './LawyerConnect'
 
 interface ChatHeaderProps {
   toggleSidebar: () => void
   sessionId: string
+  showLawyers: boolean
+  toggleLawyersPanel: () => void
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, sessionId }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, sessionId, showLawyers, toggleLawyersPanel }) => {
   return (
     <div className='p-4 border-b border-gray-700 flex items-center justify-between bg-gray-800 flex-shrink-0'>
       <div className='flex items-center gap-4'>
@@ -22,7 +25,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, sessionId }) => 
         </button>
         <h1 className='text-lg font-semibold'>Trợ lý Pháp lý AI</h1>
       </div>
-      <div className='flex items-center gap-2'>
+      <div className='flex items-center gap-4'>
+        <LawyerConnect showLawyers={showLawyers} toggleLawyersPanel={toggleLawyersPanel} />
         <span className='text-sm text-gray-300'>Phiên ID: {sessionId.substring(0, 8)}</span>
       </div>
     </div>

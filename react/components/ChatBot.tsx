@@ -5,7 +5,6 @@ import ChatHeader from './ChatHeader'
 import ChatInterface from './ChatInterface'
 import BotTypingMessage from './BotTypingMessage'
 import { markdownToHTML } from '../utils/markdownUtils'
-// import { formatDate, formatTime } from '../utils/dateUtils'
 import { extractMermaidCode } from '../utils/diagramUtils'
 import DiagramSection from './DiagramSection'
 
@@ -159,17 +158,20 @@ const ChatBot = () => {
           sidebarOpen={sidebarOpen}
           chatHistories={chatHistories}
           activeChatId={activeChatId}
-          showLawyers={showLawyers}
           startNewChat={startNewChat}
           setActiveChatId={setActiveChatId}
-          toggleLawyersPanel={toggleLawyersPanel}
           formatDate={formatDate}
         />
 
         {/* Main chat area */}
         <div className='flex-1 flex flex-col h-full overflow-hidden'>
           {/* Header */}
-          <ChatHeader toggleSidebar={toggleSidebar} sessionId={sessionId} />
+          <ChatHeader 
+            toggleSidebar={toggleSidebar} 
+            sessionId={sessionId} 
+            showLawyers={showLawyers} 
+            toggleLawyersPanel={toggleLawyersPanel} 
+          />
 
         {/* Chat Interface */}
         <ChatInterface
