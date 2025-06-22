@@ -7,7 +7,7 @@ interface ChatHeaderProps {
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, sessionId }) => {
   return (
-    <div className='p-4 border-b border-gray-700 flex items-center justify-between bg-gray-800'>
+    <div className='p-4 border-b border-gray-700 flex items-center justify-between bg-gray-800 flex-shrink-0'>
       <div className='flex items-center gap-4'>
         <button onClick={toggleSidebar} className='p-1 rounded hover:bg-gray-700'>
           <svg

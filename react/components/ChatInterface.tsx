@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import type { Message } from '../types'
 
 interface ChatInterfaceProps {
@@ -30,15 +30,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Scroll to bottom whenever messages change
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+  // Scroll to bottom whenever messages change or loading state updates
+  useEffect(() => {
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+    scrollToBottom();
+  }, [messages, loading]); // Trigger when messages or loading changes
 
-  return (
-    <div className='flex-1 flex flex-col'>
+  return (  
+    <div className='flex-1 flex flex-col h-full overflow-hidden'>
       {/* Messages */}
-      <div className='flex-1 overflow-y-auto p-4 bg-gradient-to-b from-gray-900 to-gray-800'>
+      <div className='flex-1 overflow-y-auto p-4 bg-gradient-to-b from-gray-900 to-gray-800 min-h-0 max-h-full'>
         {messages.map((msg, idx) => (
           <div key={idx} className={`my-4 flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'}`}>
             {msg.from === 'bot' && (
@@ -139,7 +142,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       </div>
 
       {/* Input area */}
-      <div className='p-4 border-t border-gray-700 bg-gray-800'>
+      <div className='p-4 border-t border-gray-700 bg-gray-800 flex-shrink-0'>
         <div className='flex gap-2'>
           <input
             value={input}

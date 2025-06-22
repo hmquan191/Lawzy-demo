@@ -11,6 +11,7 @@ interface ChatSidebarProps {
   setActiveChatId: (id: string) => void
   toggleLawyersPanel: () => void
   formatDate: (date: Date) => string
+  className?: string
 }
 
 const ChatSidebar: React.FC<ChatSidebarProps> = ({
@@ -21,13 +22,14 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
   startNewChat,
   setActiveChatId,
   toggleLawyersPanel,
-  formatDate
+  formatDate,
+  className
 }) => {
   return (
     <div
       className={`${
         sidebarOpen ? 'w-72' : 'w-0'
-      } transition-all duration-300 overflow-hidden flex flex-col border-r border-gray-700 bg-gray-800`}
+      } transition-all duration-300 overflow-hidden flex flex-col border-r border-gray-700 bg-gray-800 h-full ${className || ''}`}
     >
       <div className='p-4 border-b border-gray-700 flex items-center justify-between'>
         <h2 className='text-xl font-bold text-blue-400'>Lawzy</h2>

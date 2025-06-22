@@ -5,7 +5,6 @@ import ChatHeader from './ChatHeader'
 import ChatInterface from './ChatInterface'
 import BotTypingMessage from './BotTypingMessage'
 import { markdownToHTML } from '../utils/markdownUtils'
-import { formatDate, formatTime } from '../utils/dateUtils'
 import type { Message, ChatHistory } from '../types'
 
 const ChatBot = () => {
@@ -143,35 +142,37 @@ const ChatBot = () => {
   }
 
   return (
-    <div className='flex h-screen bg-gray-900 text-white'>
-      {/* Sidebar */}
-      <ChatSidebar
-        sidebarOpen={sidebarOpen}
-        chatHistories={chatHistories}
-        activeChatId={activeChatId}
-        showLawyers={showLawyers}
-        startNewChat={startNewChat}
-        setActiveChatId={setActiveChatId}
-        toggleLawyersPanel={toggleLawyersPanel}
-        formatDate={formatDate}
-      />
-
-      {/* Main chat area */}
-      <div className='flex-1 flex flex-col'>
-        {/* Header */}
-        <ChatHeader toggleSidebar={toggleSidebar} sessionId={sessionId} />
-
-        {/* Chat Interface */}
-        <ChatInterface
-          messages={messages}
-          loading={loading}
-          input={input}
-          setInput={setInput}
-          handleSend={handleSend}
-          markdownToHTML={markdownToHTML}
-          formatTime={formatTime}
-          BotTypingMessage={BotTypingMessage}
+    <div className='flex flex-col h-screen bg-gray-900 text-white overflow-hidden'>
+      <div className='flex flex-1 h-full overflow-hidden'>
+        {/* Sidebar */}
+        <ChatSidebar
+          sidebarOpen={sidebarOpen}
+          chatHistories={chatHistories}
+          activeChatId={activeChatId}
+          showLawyers={showLawyers}
+          startNewChat={startNewChat}
+          setActiveChatId={setActiveChatId}
+          toggleLawyersPanel={toggleLawyersPanel}
+          formatDate={formatDate}
         />
+
+        {/* Main chat area */}
+        <div className='flex-1 flex flex-col h-full overflow-hidden'>
+          {/* Header */}
+          <ChatHeader toggleSidebar={toggleSidebar} sessionId={sessionId} />
+
+          {/* Chat Interface */}
+          <ChatInterface
+            messages={messages}
+            loading={loading}
+            input={input}
+            setInput={setInput}
+            handleSend={handleSend}
+            markdownToHTML={markdownToHTML}
+            formatTime={formatTime}
+            BotTypingMessage={BotTypingMessage}
+          />
+        </div>
       </div>
     </div>
   )
