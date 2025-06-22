@@ -5,6 +5,10 @@ import ChatHeader from './ChatHeader'
 import ChatInterface from './ChatInterface'
 import BotTypingMessage from './BotTypingMessage'
 import { markdownToHTML } from '../utils/markdownUtils'
+// import { formatDate, formatTime } from '../utils/dateUtils'
+import { extractMermaidCode } from '../utils/diagramUtils'
+import DiagramSection from './DiagramSection'
+
 import type { Message, ChatHistory } from '../types'
 
 const ChatBot = () => {
@@ -16,6 +20,12 @@ const ChatBot = () => {
   const [activeChatId, setActiveChatId] = useState<string | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [showLawyers, setShowLawyers] = useState(false)
+
+  const latestBotMsgWithDiagram = [...messages]
+    .reverse()
+    .find((msg) => msg.from === 'bot' && msg.text.includes('```mermaid'))
+
+  const mermaidCode = latestBotMsgWithDiagram ? extractMermaidCode(latestBotMsgWithDiagram.text) : null
 
   // Khởi tạo sessionId và chat histories
   useEffect(() => {
@@ -161,19 +171,21 @@ const ChatBot = () => {
           {/* Header */}
           <ChatHeader toggleSidebar={toggleSidebar} sessionId={sessionId} />
 
-          {/* Chat Interface */}
-          <ChatInterface
-            messages={messages}
-            loading={loading}
-            input={input}
-            setInput={setInput}
-            handleSend={handleSend}
-            markdownToHTML={markdownToHTML}
-            formatTime={formatTime}
-            BotTypingMessage={BotTypingMessage}
-          />
-        </div>
+        {/* Chat Interface */}
+        <ChatInterface
+          messages={messages}
+          loading={loading}
+          input={input}
+          setInput={setInput}
+          handleSend={handleSend}
+          markdownToHTML={markdownToHTML}
+          formatTime={formatTime}
+          BotTypingMessage={BotTypingMessage}
+        />
       </div>
+      </div>
+      {/* Diagram Section */}
+      {/* {mermaidCode && <DiagramSection mermaidCode={mermaidCode} />} */}
     </div>
   )
 }
