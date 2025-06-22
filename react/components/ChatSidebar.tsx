@@ -1,15 +1,12 @@
 import React from 'react'
-import LawyerConnect from './LawyerConnect'
 import type { ChatHistory } from '../types'
 
 interface ChatSidebarProps {
   sidebarOpen: boolean
   chatHistories: ChatHistory[]
   activeChatId: string | null
-  showLawyers: boolean
   startNewChat: () => void
   setActiveChatId: (id: string) => void
-  toggleLawyersPanel: () => void
   formatDate: (date: Date) => string
   className?: string
 }
@@ -18,10 +15,8 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
   sidebarOpen,
   chatHistories,
   activeChatId,
-  showLawyers,
   startNewChat,
   setActiveChatId,
-  toggleLawyersPanel,
   formatDate,
   className
 }) => {
@@ -53,9 +48,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
             </div>
           ))}
         </div>
-      </div>
-      <div className='mt-auto p-4 border-t border-gray-700'>
-        <LawyerConnect showLawyers={showLawyers} toggleLawyersPanel={toggleLawyersPanel} />
       </div>
     </div>
   )
