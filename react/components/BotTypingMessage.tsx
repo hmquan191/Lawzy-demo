@@ -1,0 +1,45 @@
+import React, { useState, useEffect } from 'react'
+
+interface BotTypingMessageProps {
+  text: string
+  timestamp: Date
+  showFull: boolean
+  markdownToHTML: (markdown: string) => string
+  formatTime: (date: Date) => string
+}
+
+const BotTypingMessage: React.FC<BotTypingMessageProps> = ({
+  text,
+  timestamp,
+  showFull,
+  markdownToHTML,
+  formatTime
+}) => {
+  const [displayed, setDisplayed] = useState<string>('')
+  
+  useEffect(() => {
+    if (showFull) {
+      setDisplayed(text)
+      return
+    }
+    
+    setDisplayed('')
+    let i = 0
+    const interval = setInterval(() => {
+      setDisplayed(text.slice(0, i + 1))
+      i++
+      if (i >= text.length) clearInterval(interval)
+    }, 15)
+    
+    return () => clearInterval(interval)
+  }, [text, showFull])
+  
+  return (
+    <div>
+      <div className='mb-1' dangerouslySetInnerHTML={{ __html: markdownToHTML(displayed) }} />
+      <div className='text-xs text-blue-300 text-right'>{formatTime(timestamp)}</div>
+    </div>
+  )
+}
+
+export default BotTypingMessage 
