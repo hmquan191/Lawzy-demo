@@ -116,6 +116,7 @@ const ChatBot = () => {
   return (
     <div className='flex flex-col h-screen bg-gray-900 text-white overflow-hidden'>
       <div className='flex flex-1 h-full overflow-hidden'>
+        {/* Sidebar lịch sử chat */}
         <ChatSidebar
           sidebarOpen={sidebarOpen}
           chatHistories={chatHistories}
@@ -127,14 +128,16 @@ const ChatBot = () => {
           formatDate={formatDate}
         />
 
-        <div className='flex flex-1 flex-row overflow-hidden'>
-          <div className='flex flex-col flex-1'>
-            <ChatHeader
-              toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-              sessionId={sessionId}
-              showLawyers={showLawyers}
-              toggleLawyersPanel={() => setShowLawyers(!showLawyers)}
-            />
+        {/* Khung chat chính */}
+        <div className='flex flex-1 flex-col overflow-hidden'>
+          <ChatHeader
+            toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+            sessionId={sessionId}
+            showLawyers={showLawyers}
+            toggleLawyersPanel={() => setShowLawyers(!showLawyers)}
+          />
+
+          <div className='flex flex-1 overflow-hidden'>
             <ChatInterface
               messages={messages}
               loading={loading}
@@ -145,13 +148,42 @@ const ChatBot = () => {
               formatTime={formatTime}
               BotTypingMessage={BotTypingMessage}
             />
-          </div>
 
-          {diagram && (
-            <div className='w-[400px] border-l border-gray-700 bg-gray-800'>
-              <DiagramSection diagramData={diagram} />
-            </div>
-          )}
+            {/* Panel bên phải: có thể chuyển qua lại giữa Diagram và Luật sư */}
+            {diagram || showLawyers ? (
+              <div className='w-[400px] bg-gray-800 border-l border-gray-700 flex flex-col'>
+                <div className='flex border-b border-gray-600 text-sm'>
+                  <button
+                    className={`flex-1 p-2 text-center ${
+                      diagram ? 'bg-gray-900 text-white' : 'bg-gray-700 text-gray-300'
+                    }`}
+                    onClick={() => setShowLawyers(false)}
+                  >
+                    📊 Sơ đồ
+                  </button>
+                  <button
+                    className={`flex-1 p-2 text-center ${
+                      showLawyers ? 'bg-gray-900 text-white' : 'bg-gray-700 text-gray-300'
+                    }`}
+                    onClick={() => setShowLawyers(true)}
+                  >
+                    👨‍⚖️ Luật sư
+                  </button>
+                </div>
+
+                <div className='flex-1 overflow-auto'>
+                  {showLawyers ? (
+                    <div className='p-4'>
+                      {/* Component kết nối luật sư */}
+                      <p className='text-white'>📞 Tính năng kết nối luật sư đang được phát triển.</p>
+                    </div>
+                  ) : (
+                    diagram && <DiagramSection diagramData={diagram} />
+                  )}
+                </div>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>
