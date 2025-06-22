@@ -65,38 +65,20 @@ const ChatBot = () => {
       })
 
       const data = await res.json()
+      let rawOutput = data.output
 
-      let rawText = ''
-      let diagramJson = null
-      let cleanText = ''
-
-      try {
-        const parsed = JSON.parse(data.output) // ✅ Đây là mấu chốt: parse string thành object
-
-        rawText = parsed.output || ''
-        diagramJson = parsed.diagram || null
-        cleanText = rawText.trim()
-
-        console.log('✅ Bot trả về text:', rawText)
-        console.log('📊 Parsed diagram:', diagramJson)
-      } catch (err) {
-        console.warn('❌ Không thể parse JSON từ bot:', err)
-        rawText = data.output || ''
-        cleanText = rawText.trim()
+      if (typeof rawOutput !== 'string') {
+        rawOutput = JSON.stringify(rawOutput)
       }
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          from: 'bot',
-          text: cleanText,
-          timestamp: new Date()
-        }
-      ])
+      const { text: cleanText, diagram } = extractDiagramJson(rawOutput)
 
-      setDiagram(diagramJson)
+      console.log('✅ Bot trả về text:', cleanText)
+      console.log('📊 Parsed diagram:', diagram)
 
-      // Nếu đây là tin nhắn đầu tiên → tạo lịch sử mới
+      setMessages((prev) => [...prev, { from: 'bot', text: cleanText, timestamp: new Date() }])
+      setDiagram(diagram)
+
       if (messages.length <= 1) {
         const newChatId = uuidv4()
         const newChat: ChatHistory = {
@@ -165,7 +147,6 @@ const ChatBot = () => {
             />
           </div>
 
-          {/* Diagram hiển thị khi có dữ liệu */}
           {diagram && (
             <div className='w-[400px] border-l border-gray-700 bg-gray-800'>
               <DiagramSection diagramData={diagram} />

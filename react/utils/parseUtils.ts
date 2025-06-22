@@ -1,33 +1,36 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const extractDiagramJson = (
-  raw: string
-): {
-  cleanText: string
-  diagram: any | null
-} => {
-  let diagram: any | null = null
-  let cleanText = raw.trim()
+import type { DiagramData } from '../types'
 
-  // 1. Tìm toàn bộ JSON object (dài nhất có thể)
-  const fullJsonMatch = raw.match(/\{[\s\S]*"diagram"[\s\S]*?\}/)
+interface ExtractResult {
+  text: string
+  diagram: DiagramData | null
+}
 
-  if (fullJsonMatch) {
-    const matchedText = fullJsonMatch[0]
+export const extractDiagramJson = (raw: string): ExtractResult => {
+  let cleanText = raw
+  let diagram: DiagramData | null = null
 
+  try {
+    // Nếu entire string là JSON (object), parse luôn
+    const parsed = JSON.parse(raw)
+    if (parsed.diagram) {
+      return { text: parsed.output || '', diagram: parsed.diagram }
+    }
+  } catch {
+    // Không làm gì vì có thể là text thường
+  }
+
+  // ✅ Nếu không phải object JSON, cố tìm đoạn JSON nhúng bên trong văn bản
+  const match = raw.match(/\{[\s\S]*?"diagram"\s*:\s*\{[\s\S]*?\}\s*\}/)
+
+  if (match) {
     try {
-      const fullObj = JSON.parse(matchedText)
-
-      if ('diagram' in fullObj && fullObj.diagram?.nodes && fullObj.diagram?.edges) {
-        diagram = fullObj.diagram
-      } else if (fullObj?.nodes && fullObj?.edges) {
-        diagram = fullObj
-      }
-
-      cleanText = raw.replace(matchedText, '').trim()
+      const diagramObj = JSON.parse(match[0])
+      diagram = diagramObj.diagram || null
+      cleanText = raw.replace(match[0], '').trim()
     } catch (err) {
-      console.warn('⚠️ Không thể parse JSON sơ đồ:', err)
+      console.warn('❌ Không thể parse JSON sơ đồ:', err)
     }
   }
 
-  return { cleanText, diagram }
+  return { text: cleanText.trim(), diagram }
 }
