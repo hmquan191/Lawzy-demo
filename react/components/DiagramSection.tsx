@@ -25,13 +25,14 @@ const DiagramSection = ({ diagramData }: { diagramData: DiagramData }) => {
         draggable: true,
         data: { label: (isRoot ? '⭐' : '📌 ') + node.label },
         style: {
-          background: isRoot ? '#feca57' : '#48dbfb',
+          background: isRoot ? '#fc8e5a' : '#48dbfb',
           color: '#000',
           padding: 10,
           border: '2px solid #333',
           borderRadius: '10px',
-          fontWeight: 'bold',
-          fontSize: 14
+          fontWeight: 'normal',
+          fontSize: 14,
+          fontFamily: 'Product Sans, sans-serif'
         }
       }
     })
@@ -44,10 +45,11 @@ const DiagramSection = ({ diagramData }: { diagramData: DiagramData }) => {
       target: edge.to,
       label: edge.label || '',
       animated: true,
-      style: { stroke: '#1e90ff', strokeWidth: 2 },
+      style: { stroke: '#fc8e5a', strokeWidth: 2 },
+      labelStyle: { fontFamily: 'Product Sans, sans-serif', fontWeight: 'normal' },
       markerEnd: {
         type: MarkerType.ArrowClosed,
-        color: '#1e90ff'
+        color: '#fc8e5a'
       }
     }))
   }, [diagramData])
@@ -60,7 +62,7 @@ const DiagramSection = ({ diagramData }: { diagramData: DiagramData }) => {
   }
 
   return (
-    <div className='w-[400px] h-full bg-white border-l border-gray-700 p-2'>
+    <div className='w-[400px] h-full bg-white border-l border-gray-200 p-2 font-["Product_Sans"] font-normal'>
       <div className='h-full'>
         <ReactFlow
           nodes={nodes}
@@ -72,7 +74,7 @@ const DiagramSection = ({ diagramData }: { diagramData: DiagramData }) => {
           zoomOnPinch
           nodesDraggable
           nodesConnectable={false}
-          style={{ background: '#f8f9fa' }}
+          style={{ background: '#fefff9' }}
         >
           <MiniMap />
           <Background color='#eee' />

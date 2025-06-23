@@ -35,9 +35,9 @@ const BotTypingMessage: React.FC<BotTypingMessageProps> = ({
   }, [text, showFull])
 
   return (
-    <div>
-      <div className='mb-1' dangerouslySetInnerHTML={{ __html: markdownToHTML(displayed) }} />
-      <div className='text-xs text-blue-300 text-right'>{formatTime(timestamp)}</div>
+    <div className="font-['Inter']">
+      <div className='mb-1 prose prose-sm max-w-none prose-headings:text-gray-800 prose-a:text-[#fc8e5a]' dangerouslySetInnerHTML={{ __html: markdownToHTML(displayed) }} />
+      <div className='text-xs text-gray-500 text-right'>{formatTime(timestamp)}</div>
     </div>
   )
 }

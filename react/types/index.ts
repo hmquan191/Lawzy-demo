@@ -27,3 +27,29 @@ export interface ChatHistory {
   title: string
   date: Date
 }
+
+export interface DiagramData {
+  type: string
+  content: string
+}
+
+export interface LawyerLocation {
+  lat: number
+  lng: number
+  address: string
+}
+
+export interface Lawyer {
+  id: string
+  name: string
+  specialty: string
+  rating: number
+  online: boolean 
+  avatar: string
+  location?: LawyerLocation
+  distance?: number
+  estimatedTime?: number
+  reviewCount?: number
+  address?: string
+  bio?: string
+}

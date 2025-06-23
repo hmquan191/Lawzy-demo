@@ -6,7 +6,20 @@ export default {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        product: ['Product_Sans', 'sans-serif'],
+      },
+      colors: {
+        'lawzy-orange': '#fc8e5a',
+        'lawzy-bg': '#fefff9',
+      },
+      fontWeight: {
+        normal: '400',
+        regular: '500',
+      }
+    },
   },
   plugins: [
     require('@tailwindcss/typography'),
