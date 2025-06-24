@@ -31,9 +31,9 @@ const ChatBot = () => {
     setSessionId(storedId)
 
     const mockHistories: ChatHistory[] = [
-      { id: 'hist1', title: 'Tư vấn hợp đồng thuê nhà', date: new Date(2023, 5, 15) },
-      { id: 'hist2', title: 'Tranh chấp đất đai', date: new Date(2023, 6, 22) },
-      { id: 'hist3', title: 'Thủ tục ly hôn', date: new Date(2023, 7, 3) }
+      { id: 'hist1', title: 'Tư vấn hợp đồng thuê nhà', date: new Date(2025, 15 - 1, 6) }, // 15/06/2025
+      { id: 'hist2', title: 'Tranh chấp đất đai', date: new Date(2025, 22 - 1, 7) }, // 22/07/2025
+      { id: 'hist3', title: 'Thủ tục ly hôn', date: new Date(2025, 3 - 1, 8) } // 03/08/2025
     ]
     setChatHistories(mockHistories)
 
@@ -154,19 +154,13 @@ const ChatBot = () => {
               <div className='w-[400px] bg-[#fefff9] border-l border-gray-200 flex flex-col'>
                 <div className='p-3 border-b border-gray-200 flex items-center justify-between'>
                   <h3 className='font-medium'>📊 Sơ đồ minh họa</h3>
-                  <button 
-                    onClick={() => setShowLawyers(true)}
-                    className='px-3 py-1 bg-[#fc8e5a] hover:bg-[#fc8e5a]/90 rounded text-sm text-white flex items-center gap-1'
-                  >
-                    <span>👨‍⚖️</span> Kết nối luật sư
-                  </button>
                 </div>
                 <div className='flex-1 overflow-auto'>
                   <DiagramSection diagramData={diagram} />
                 </div>
               </div>
             )}
-            
+
             {/* Popup kết nối luật sư */}
             <LawyerPopup isOpen={showLawyers} onClose={() => setShowLawyers(false)} />
           </div>

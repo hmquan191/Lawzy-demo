@@ -9,7 +9,7 @@ interface ChatHeaderProps {
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, sessionId, toggleLawyersPanel }) => {
   return (
-    <div className='p-4 border-b border-gray-200 flex items-center justify-between bg-[#fefff9] text-gray-800 flex-shrink-0 font-["Product_Sans"]'>
+    <div className='p-4 border-b border-gray-200 flex items-center justify-between bg-[#fefff9] text-gray-800 flex-shrink-0 font-sans'>
       <div className='flex items-center gap-4'>
         <button onClick={toggleSidebar} className='p-1 rounded hover:bg-[#fc8e5a]/10'>
           <svg
@@ -22,10 +22,10 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, sessionId, toggl
             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M4 6h16M4 12h16M4 18h16' />
           </svg>
         </button>
-        
+
         <span className='text-sm bg-[#fc8e5a] px-3 py-1.5 rounded text-white'>Trợ lý pháp lý AI</span>
-        
-        <button 
+
+        <button
           onClick={toggleLawyersPanel}
           className='px-3 py-1.5 bg-[#fc8e5a] text-white hover:bg-[#fc8e5a]/90 rounded-md flex items-center gap-2 text-sm'
         >
@@ -48,10 +48,10 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, sessionId, toggl
       </div>
       <div className='flex items-center gap-4'>
         <span className='text-sm bg-[#fc8e5a] px-3 py-1.5 rounded text-white'>Xin chào, Nguyễn Văn A</span>
-        <span className='text-sm bg-[#fc8e5a]/10 text-[#fc8e5a] px-2 py-1 rounded'>ID: {sessionId.substring(0, 8)}</span>
+        {/* <span className='text-sm bg-[#fc8e5a]/10 text-[#fc8e5a] px-2 py-1 rounded'>ID: {sessionId.substring(0, 8)}</span> */}
       </div>
     </div>
   )
 }
 
-export default ChatHeader 
+export default ChatHeader
