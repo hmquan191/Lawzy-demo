@@ -57,9 +57,9 @@ const ChatBot = () => {
     setMessages((prev) => [...prev, userMessage])
     setInput('')
     setLoading(true)
-
+    // ("https://lawzy-backend.onrender.com/api/chatbot"
     try {
-      const res = await fetch('http://localhost:3001/api/chatbot', {
+      const res = await fetch('https://lawzy-backend.onrender.com/api/chatbot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: input, sessionId })
