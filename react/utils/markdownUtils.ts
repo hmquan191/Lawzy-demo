@@ -4,6 +4,8 @@
  * @returns HTML string
  */
 export const markdownToHTML = (markdown: string): string => {
+  // Clean up empty code blocks like ```json\n\n```, ```ts\n```, etc.
+  markdown = markdown.replace(/```(?:\w+)?\s*```/g, '')
   // Convert headings
   let html = markdown
     .replace(/^### (.*$)/gim, '<h3>$1</h3>')
@@ -38,8 +40,8 @@ export const markdownToHTML = (markdown: string): string => {
 
   // Ensure ul tags are properly closed
   html = html.replace(/<ul>(.*?)<\/ul>|(.*)$/s, (match, ulContent, rest) => {
-    return ulContent ? `<ul>${ulContent}</ul>` : rest;
-  });
+    return ulContent ? `<ul>${ulContent}</ul>` : rest
+  })
 
   return html
-} 
+}
