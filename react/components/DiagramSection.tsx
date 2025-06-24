@@ -23,7 +23,7 @@ const DiagramSection = ({ diagramData }: { diagramData: DiagramData }) => {
         type: 'default',
         position: { x, y },
         draggable: true,
-        data: { label: (isRoot ? '⭐' : '📌 ') + node.label },
+        data: { label: (isRoot ? '🖊️' : '📌 ') + node.label },
         style: {
           background: isRoot ? '#fc8e5a' : '#48dbfb',
           color: '#000',

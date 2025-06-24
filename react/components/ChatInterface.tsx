@@ -70,7 +70,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
               {msg.from === 'user' ? (
                 <div>
                   <div className='mb-1'>{msg.text}</div>
-                  <div className='text-xs text-[#fc8e5a]/30 text-right'>{formatTime(msg.timestamp)}</div>
+                  <div className='text-xs text-white text-right'>{formatTime(msg.timestamp)}</div>
                 </div>
               ) : (
                 <div>

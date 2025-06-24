@@ -31,9 +31,9 @@ const ChatBot = () => {
     setSessionId(storedId)
 
     const mockHistories: ChatHistory[] = [
-      { id: 'hist1', title: 'Tư vấn hợp đồng thuê nhà', date: new Date(2025, 15 - 1, 6) }, // 15/06/2025
-      { id: 'hist2', title: 'Tranh chấp đất đai', date: new Date(2025, 22 - 1, 7) }, // 22/07/2025
-      { id: 'hist3', title: 'Thủ tục ly hôn', date: new Date(2025, 3 - 1, 8) } // 03/08/2025
+      // { id: 'hist1', title: 'Tư vấn hợp đồng thuê nhà', date: new Date(2025, 15 - 1, 6) }, // 15/06/2025
+      // { id: 'hist2', title: 'Tranh chấp đất đai', date: new Date(2025, 22 - 1, 7) }, // 22/07/2025
+      // { id: 'hist3', title: 'Thủ tục ly hôn', date: new Date(2025, 3 - 1, 8) } // 03/08/2025
     ]
     setChatHistories(mockHistories)
 

@@ -7,7 +7,7 @@ interface ChatHeaderProps {
   toggleLawyersPanel: () => void
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, sessionId, toggleLawyersPanel }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, toggleLawyersPanel }) => {
   return (
     <div className='p-4 border-b border-gray-200 flex items-center justify-between bg-[#fefff9] text-gray-800 flex-shrink-0 font-sans'>
       <div className='flex items-center gap-4'>
@@ -48,7 +48,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, sessionId, toggl
       </div>
       <div className='flex items-center gap-4'>
         <span className='text-sm bg-[#fc8e5a] px-3 py-1.5 rounded text-white'>Xin chào, Nguyễn Văn A</span>
-        {/* <span className='text-sm bg-[#fc8e5a]/10 text-[#fc8e5a] px-2 py-1 rounded'>ID: {sessionId.substring(0, 8)}</span> */}
       </div>
     </div>
   )
