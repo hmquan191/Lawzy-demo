@@ -152,15 +152,14 @@ const ChatBot = () => {
             {/* Panel bên phải: chỉ hiển thị sơ đồ */}
             {diagram && (
               <div className='w-[400px] bg-[#fefff9] border-l border-gray-200 flex flex-col'>
-              <div className='p-3 border-b border-gray-200 flex items-center justify-between'>
-                <h3 className='font-medium'>📊 Sơ đồ minh họa</h3>
-              </div>
-              <div className='flex-1 overflow-auto'>
-                <DiagramSection diagramData={diagram} key={JSON.stringify(diagram)} />
-              </div>
+                <div className='p-3 border-b border-gray-200 flex items-center justify-between'>
+                  <h3 className='font-sans font-semibold text-2xl'>📊 Sơ đồ minh họa</h3>
+                </div>
+                <div className='flex-1 overflow-auto'>
+                  <DiagramSection diagramData={diagram} key={JSON.stringify(diagram)} />
+                </div>
               </div>
             )}
-          
 
             {/* Popup kết nối luật sư */}
             <LawyerPopup isOpen={showLawyers} onClose={() => setShowLawyers(false)} />
