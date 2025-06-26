@@ -158,8 +158,8 @@ const ChatBot = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab as 'diagram' | 'image' | 'video')}
-                    className={` px-6 py-2 rounded-full font-medium min-w-[100px] transition-colors ${
-                      activeTab === tab ? 'bg-orange-300' : 'bg-white-100'
+                    className={`px-6 py-2 rounded-full min-w-[100px] transition-colors ${
+                      activeTab === tab ? 'bg-[#fc8e5a] text-white font-semibold' : 'bg-gray-100 text-gray-600'
                     }`}
                   >
                     {tab === 'diagram' && 'Sơ đồ'}
