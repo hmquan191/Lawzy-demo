@@ -70,8 +70,17 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
         </div>
       </div>
 
-      <div className='mt-4 p-4 font-sans'>
-        <h3 className='text-xl mb-3 text-gray-800'>Explore Lawzy</h3>
+      <div className='mt-1 p-4 font-sans'>
+        <div className='relative group w-fit'>
+          <h3 className='text-xl mb-3 text-gray-800 cursor-pointer'>
+            Explore Lawzy{' '}
+            <span className='italic text-sm text-gray-500 flex justify-center items-center w-full'>coming soon</span>
+          </h3>
+          {/* 
+          <span className='pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-1 px-2 py-1 rounded bg-white text-black text-xs opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap'>
+            coming soon
+          </span> */}
+        </div>
         <div className='flex flex-col gap-3'>
           <div className='hover:bg-gray-100 rounded px-3 py-2 cursor-pointer text-gray-700 transition'>
             Soạn hợp đồng
