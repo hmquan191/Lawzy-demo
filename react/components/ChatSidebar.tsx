@@ -30,7 +30,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
     >
       {/* Logo and New Chat Button */}
       <div className='p-4 flex flex-col gap-4 items-center'>
-        <div className='flex items-center justify-center min-w-min mb-2 -mt-7'>
+        <div className='flex items-center justify-center min-w-min -mb-2 -mt-7'>
           <img className='max-w-[160px] h-auto object-contain' src='assets/LawzyLogo.png' alt='Lawzy Logo' />
         </div>
         <button
