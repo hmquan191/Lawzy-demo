@@ -70,32 +70,49 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
         </div>
       </div>
 
-      {/* Explore Section */}
-      <div className=' font-sanmt-4 p-4'>
-        <h3 className='text-xl mb-3 text-gray-800'>Explore Lawzy</h3>
-        <ul className='space-y-2'>
-          <li className='flex hover:cursor-pointer items-start gap-2 text-gray-700'>
-            <span className='text-xs mt-1'>•</span>
-            <span>Soạn hợp đồng</span>
-          </li>
-          <li className='flex hover:cursor-pointer items-start gap-2 text-gray-700'>
-            <span className='text-xs mt-1'>•</span>
-            <span>Kiểm tra rủi ro hợp đồng</span>
-          </li>
-          <li className='flex hover:cursor-pointer items-start gap-2 text-gray-700'>
-            <span className='text-xs mt-1'>•</span>
-            <span>Hỗ trợ đàm phán hợp đồng</span>
-          </li>
-        </ul>
+      <div className='mt-1 p-4 font-sans'>
+        <div className='relative group w-fit'>
+          <h3 className='text-xl mb-3 text-gray-800 cursor-pointer'>
+            Explore Lawzy{' '}
+            <span className='italic text-sm text-gray-500 flex justify-center items-center w-full'>coming soon</span>
+          </h3>
+          {/* 
+          <span className='pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-1 px-2 py-1 rounded bg-white text-black text-xs opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap'>
+            coming soon
+          </span> */}
+        </div>
+        <div className='flex flex-col gap-3'>
+          <div className='hover:bg-gray-100 rounded px-3 py-2 cursor-pointer text-gray-700 transition'>
+            Soạn hợp đồng
+          </div>
+          <div className='hover:bg-gray-100 rounded px-3 py-2 cursor-pointer text-gray-700 transition'>
+            Kiểm tra rủi ro hợp đồng
+          </div>
+          <div className='hover:bg-gray-100 rounded px-3 py-2 cursor-pointer text-gray-700 transition'>
+            Hỗ trợ đàm phán hợp đồng
+          </div>
+        </div>
       </div>
 
       {/* Footer Menu */}
       <div className=' font-sans mt-auto'>
         <div className='p-2'>
-          <div className='p-2 hover:bg-gray-100 rounded cursor-pointer text-gray-800'>Profile</div>
-          <div className='p-2 hover:bg-gray-100 rounded cursor-pointer text-gray-800'>Settings</div>
-          <div className='p-2 hover:bg-gray-100 rounded cursor-pointer text-gray-800'>Help</div>
-          <div className='p-2  hover:bg-gray-100 rounded cursor-pointer text-gray-800'>Log Out</div>
+          <div className='p-2 hover:bg-gray-100 rounded cursor-pointer text-gray-800 flex items-center gap-2'>
+            <img src='/assets/profile.svg' alt='Profile' className='w-5 h-5 m-1' />
+            Profile
+          </div>
+          <div className='p-2 hover:bg-gray-100 rounded cursor-pointer text-gray-800 flex items-center gap-2'>
+            <img src='/assets/settings.svg' alt='Settings' className='w-5 h-5 m-1' />
+            Settings
+          </div>
+          <div className='p-2 hover:bg-gray-100 rounded cursor-pointer text-gray-800 flex items-center gap-2'>
+            <img src='/assets/help.svg' alt='Help' className='w-5 h-5 m-1' />
+            Help
+          </div>
+          <div className='p-2 hover:bg-gray-100 rounded cursor-pointer text-gray-800 flex items-center gap-2'>
+            <img src='/assets/logout.svg' alt='Log Out' className='w-5 h-5 m-1' />
+            Log Out
+          </div>
         </div>
       </div>
     </div>
