@@ -32,7 +32,7 @@ const DiagramSection = ({ diagramData }: { diagramData: DiagramData }) => {
           borderRadius: '10px',
           fontWeight: 'normal',
           fontSize: 14,
-          fontFamily: 'Product Sans, sans-serif'
+          fontFamily: 'Inter, sans-serif'
         }
       }
     })
@@ -46,7 +46,7 @@ const DiagramSection = ({ diagramData }: { diagramData: DiagramData }) => {
       label: edge.label || '',
       animated: true,
       style: { stroke: '#fc8e5a', strokeWidth: 2 },
-      labelStyle: { fontFamily: 'Product Sans, sans-serif', fontWeight: 'normal' },
+      labelStyle: { fontFamily: 'Inter, sans-serif', fontWeight: 'normal' },
       markerEnd: {
         type: MarkerType.ArrowClosed,
         color: '#fc8e5a'
@@ -62,7 +62,7 @@ const DiagramSection = ({ diagramData }: { diagramData: DiagramData }) => {
   }
 
   return (
-    <div className='w-[400px] h-full bg-white border-l border-gray-200 p-2 font-["Product_Sans"] font-normal'>
+    <div className='w-[400px] h-full bg-white border-l border-gray-200 p-2 font-["Inter"] font-normal'>
       <div className='h-full'>
         <ReactFlow
           nodes={nodes}

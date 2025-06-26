@@ -23,6 +23,13 @@ const ChatBot = () => {
   const [diagram, setDiagram] = useState<DiagramData | null>(null)
   const [activeTab, setActiveTab] = useState<'diagram' | 'image' | 'video'>('diagram')
 
+  // Tin nhắn chào mừng ban đầu
+  const welcomeMessage: Message = {
+    from: 'bot',
+    text: '# Chào mừng bạn đến với Lawzy!\nTôi là trợ lý AI pháp lý, có thể giúp bạn:\n- Giải đáp thắc mắc về luật pháp\n- Hướng dẫn thủ tục pháp lý\n- Phân tích tài liệu pháp lý\n- Kết nối với luật sư chuyên nghiệp\n\nBạn cần hỗ trợ gì hôm nay?',
+    timestamp: new Date()
+  }
+
   useEffect(() => {
     let storedId = localStorage.getItem('sessionId')
     if (!storedId) {
@@ -38,14 +45,15 @@ const ChatBot = () => {
     ]
     setChatHistories(mockHistories)
 
-    setMessages([
-      {
-        from: 'bot',
-        text: '# Chào mừng bạn đến với Lawzy!\nTôi là trợ lý AI pháp lý, có thể giúp bạn:\n- Giải đáp thắc mắc về luật pháp\n- Hướng dẫn thủ tục pháp lý\n- Phân tích tài liệu pháp lý\n- Kết nối với luật sư chuyên nghiệp\n\nBạn cần hỗ trợ gì hôm nay?',
-        timestamp: new Date()
-      }
-    ])
+    setMessages([welcomeMessage])
   }, [])
+
+  // Hàm để bắt đầu một cuộc trò chuyện mới
+  const startNewChat = () => {
+    setMessages([{...welcomeMessage, timestamp: new Date()}])
+    setDiagram(null)
+    setActiveChatId(null)
+  }
 
   const handleSend = async () => {
     if (!input.trim()) return
@@ -116,14 +124,14 @@ const ChatBot = () => {
     })
 
   return (
-    <div className='flex flex-col h-screen bg-white text-gray-800 overflow-hidden font-["Product_Sans"]'>
+    <div className='flex flex-col h-screen bg-white text-gray-800 overflow-hidden font-["Inter"]'>
       <div className='flex flex-1 h-full overflow-hidden'>
         {/* Sidebar lịch sử chat */}
         <ChatSidebar
           sidebarOpen={sidebarOpen}
           chatHistories={chatHistories}
           activeChatId={activeChatId}
-          startNewChat={() => setMessages([])}
+          startNewChat={startNewChat}
           setActiveChatId={setActiveChatId}
           className='h-full'
           formatDate={formatDate}

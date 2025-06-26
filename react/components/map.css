@@ -1,0 +1,50 @@
+.map {
+  height: 100%;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.leaflet-container {
+  height: 100% !important;
+  width: 100% !important;
+  z-index: 1;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .leaflet-container {
+    height: 300px !important;
+  }
+}
+
+/* Custom marker styles */
+.user-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lawyer-marker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Fix Leaflet popup styles */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+}
+
+.leaflet-popup-content {
+  margin: 8px 12px;
+  line-height: 1.4;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: #666;
+} 

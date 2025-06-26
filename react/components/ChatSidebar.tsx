@@ -24,7 +24,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
     <div
       className={`${
         sidebarOpen ? 'w-72' : 'w-0'
-      } transition-all duration-300 overflow-hidden flex flex-col border-r border-gray-200 bg-[#fefff9] h-full font-['Product_Sans'] ${
+      } transition-all duration-300 overflow-hidden flex flex-col border-r border-gray-200 bg-[#fefff9] h-full font-["Inter"] ${
         className || ''
       }`}
     >

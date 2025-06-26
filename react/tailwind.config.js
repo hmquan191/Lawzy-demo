@@ -9,7 +9,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        product: ['Product_Sans', 'sans-serif'],
+        product: ['Inter', 'sans-serif'],
       },
       colors: {
         'lawzy-orange': '#fc8e5a',
