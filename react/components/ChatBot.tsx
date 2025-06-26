@@ -21,6 +21,7 @@ const ChatBot = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [showLawyers, setShowLawyers] = useState<boolean>(false)
   const [diagram, setDiagram] = useState<DiagramData | null>(null)
+  const [activeTab, setActiveTab] = useState<'diagram' | 'image' | 'video'>('diagram')
 
   useEffect(() => {
     let storedId = localStorage.getItem('sessionId')
@@ -149,17 +150,43 @@ const ChatBot = () => {
               BotTypingMessage={BotTypingMessage}
             />
 
-            {/* Panel bên phải: chỉ hiển thị sơ đồ */}
-            {diagram && (
-              <div className='w-[400px] bg-[#fefff9] border-l border-gray-200 flex flex-col'>
-                <div className='p-3 border-b border-gray-200 flex items-center justify-between'>
-                  <h3 className='font-sans font-semibold text-2xl'>📊 Sơ đồ minh họa</h3>
-                </div>
-                <div className='flex-1 overflow-auto'>
-                  <DiagramSection diagramData={diagram} key={JSON.stringify(diagram)} />
-                </div>
+            {/* Panel bên phải: có tab điều hướng */}
+            <div className='w-[400px] bg-[#fefff9] border-l border-gray-200 flex flex-col'>
+              {/* Tabs */}
+              <div className='p-2 border-b border-gray-200 flex items-center justify-around gap-3'>
+                {['diagram', 'image', 'video'].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab as 'diagram' | 'image' | 'video')}
+                    className={` px-6 py-2 rounded-full font-medium min-w-[100px] transition-colors ${
+                      activeTab === tab ? 'bg-orange-300' : 'bg-white-100'
+                    }`}
+                  >
+                    {tab === 'diagram' && 'Sơ đồ'}
+                    {tab === 'image' && 'Hình ảnh'}
+                    {tab === 'video' && 'Video'}
+                  </button>
+                ))}
               </div>
-            )}
+
+              {/* Nội dung tab */}
+              <div className='flex-1 overflow-auto p-2'>
+                {activeTab === 'diagram' &&
+                  (diagram ? (
+                    <DiagramSection diagramData={diagram} key={JSON.stringify(diagram)} />
+                  ) : (
+                    <div className='text-gray-500 text-center mt-10'>Chưa có biểu đồ nào được vẽ.</div>
+                  ))}
+
+                {activeTab === 'image' && (
+                  <div className='text-gray-500 text-center mt-10'>Tính năng hình ảnh sẽ sớm ra mắt.</div>
+                )}
+
+                {activeTab === 'video' && (
+                  <div className='text-gray-500 text-center mt-10'>Tính năng video sẽ sớm ra mắt.</div>
+                )}
+              </div>
+            </div>
 
             {/* Popup kết nối luật sư */}
             <LawyerPopup isOpen={showLawyers} onClose={() => setShowLawyers(false)} />
