@@ -6,10 +6,10 @@ import * as pdfjsLib from 'pdfjs-dist'
 pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js'
 
 interface Props {
-  onTextExtracted: (text: string) => void
+  onFileProcessed: (text: string, file: File | null) => void
 }
 
-const ContractUpload: React.FC<Props> = ({ onTextExtracted }) => {
+const ContractUpload: React.FC<Props> = ({ onFileProcessed }) => {
   const [loading, setLoading] = useState(false)
 
   // Convert PDF page to image
@@ -64,7 +64,7 @@ const ContractUpload: React.FC<Props> = ({ onTextExtracted }) => {
     try {
       if (file.type === 'application/pdf') {
         const text = await processPDF(file)
-        onTextExtracted(text)
+        onFileProcessed(text, file)
       } else if (file.type.startsWith('image/')) {
         const buffer = await file.arrayBuffer()
         const blob = new Blob([buffer], { type: file.type })
@@ -72,14 +72,14 @@ const ContractUpload: React.FC<Props> = ({ onTextExtracted }) => {
         const { data } = await Tesseract.recognize(imageUrl, 'vie', {
           logger: (m) => console.log(m)
         })
-        onTextExtracted(data.text)
+        onFileProcessed(data.text, file)
         URL.revokeObjectURL(imageUrl)
       } else {
-        onTextExtracted('Định dạng file không được hỗ trợ. Vui lòng tải lên PDF hoặc hình ảnh.')
+        onFileProcessed('Định dạng file không được hỗ trợ. Vui lòng tải lên PDF hoặc hình ảnh.', null)
       }
     } catch (err) {
       console.error('❌ Lỗi OCR:', err)
-      onTextExtracted('Không thể đọc được nội dung.')
+      onFileProcessed('Không thể đọc được nội dung.', null)
     } finally {
       setLoading(false)
     }
@@ -91,7 +91,7 @@ const ContractUpload: React.FC<Props> = ({ onTextExtracted }) => {
         type='file'
         accept='image/*,application/pdf'
         onChange={handleFileChange}
-        className='text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 '
+        className='text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100'
       />
       {loading && <span className='text-orange-500 text-sm'>Đang xử lý...</span>}
     </div>
