@@ -12,10 +12,10 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
   if (!isOpen) return null
 
   return (
-    <div className='fixed inset-0 z-50 bg-white flex flex-col'>
+    <div className='fixed inset-0 z-50 font-sans  border-gray-200 bg-[#fefff9] h-full flex flex-col'>
       {/* Header */}
       <div className='p-4 border-b flex justify-between items-center bg-[#fefff9]'>
-        <h2 className='text-lg font-semibold text-gray-800'>Trợ lý hợp đồng</h2>
+        <h1 className='text-2xl font-semibold text-gray-800'>Trợ lý hợp đồng</h1>
         <button onClick={onClose} className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm'>
           Quay lại
         </button>
@@ -25,7 +25,7 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
       <div className='flex flex-1'>
         {/* Bên trái: Danh sách mục lưu ý */}
         <div className='w-1/3 border-r p-4 overflow-auto'>
-          <h3 className='font-semibold text-gray-800 mb-2'>📝 Các mục cần lưu ý</h3>
+          <h3 className=' text-xl font-semibold text-gray-800 mb-2'>📝 Các mục cần lưu ý</h3>
           <ul className='list-disc pl-5 text-sm text-gray-700 space-y-1'>
             <li>Ví dụ: Mức lương dưới tối thiểu</li>
             <li>Không có điều khoản bảo hiểm</li>
@@ -37,7 +37,7 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
         {/* Bên phải: Upload và hiển thị OCR */}
         <div className='flex-1 p-4 overflow-auto'>
           <div className='flex justify-between items-center mb-4'>
-            <h3 className='font-semibold text-gray-800'>📄 Nội dung hợp đồng</h3>
+            <h3 className=' text-xl font-semibold text-gray-800 mb-2'>📄 Nội dung hợp đồng</h3>
             <ContractUpload onTextExtracted={setExtractedText} />
           </div>
           <pre className='whitespace-pre-wrap text-sm text-gray-800 border p-3 bg-gray-50 rounded max-h-[80vh] overflow-auto'>
