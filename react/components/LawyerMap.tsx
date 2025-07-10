@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Marker, Popup } from 'react-leaflet'
+// import { Marker, Popup } from 'react-leaflet'
 import { LatLngTuple } from 'leaflet'
 import './map.css'
 import Map from './map'
 import type { Lawyer } from '../types'
 
 // Đảm bảo import leaflet-defaulticon-compatibility
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-import "leaflet-defaulticon-compatibility";
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'
+import 'leaflet-defaulticon-compatibility'
 
 interface LawyerMapProps {
   onSelectLawyer: (lawyer: Lawyer) => void
@@ -18,7 +18,7 @@ const LawyerMap: React.FC<LawyerMapProps> = ({ onSelectLawyer, onClose }) => {
   const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null)
   const [loading, setLoading] = useState(true)
   const [nearbyLawyers, setNearbyLawyers] = useState<Lawyer[]>([])
-  
+
   // Vị trí trung tâm (TP. Hồ Chí Minh)
   const center: LatLngTuple = [10.775, 106.7]
 
@@ -88,72 +88,74 @@ const LawyerMap: React.FC<LawyerMapProps> = ({ onSelectLawyer, onClose }) => {
 
   // Khởi tạo dữ liệu khi component được mount
   useEffect(() => {
-    console.log("Initializing lawyer map data");
-    setNearbyLawyers(mockLawyers);
-    setLoading(false);
-  }, []);
+    console.log('Initializing lawyer map data')
+    setNearbyLawyers(mockLawyers)
+    setLoading(false)
+  }, [])
 
   // Xử lý khi chọn luật sư
   const handleSelectLawyer = (lawyer: Lawyer) => {
-    setSelectedLawyer(lawyer);
-    onSelectLawyer(lawyer);
-  };
+    setSelectedLawyer(lawyer)
+    onSelectLawyer(lawyer)
+  }
 
   return (
     <div className="bg-white rounded-lg w-[800px] max-w-[100%] max-h-[90vh] flex flex-col shadow-xl font-['Inter'] overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-[#fc8e5a] text-white rounded-t-lg">
-        <div className="flex items-center gap-2">
-          <button onClick={onClose} className="p-1 rounded hover:bg-[#fc8e5a]/90">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+      <div className='p-4 border-b border-gray-200 flex items-center justify-between bg-[#fc8e5a] text-white rounded-t-lg'>
+        <div className='flex items-center gap-2'>
+          <button onClick={onClose} className='p-1 rounded hover:bg-[#fc8e5a]/90'>
+            <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5' viewBox='0 0 20 20' fill='currentColor'>
+              <path
+                fillRule='evenodd'
+                d='M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z'
+                clipRule='evenodd'
+              />
             </svg>
           </button>
-          <h2 className="text-lg font-medium">Tìm Luật sư gần bạn</h2>
+          <h2 className='text-lg font-medium'>Tìm Luật sư gần bạn</h2>
         </div>
       </div>
 
-      <div className="flex flex-col">
+      <div className='flex flex-col'>
         {/* Luật sư gần bạn - Title */}
-        <div className="p-4">
-          <h3 className="font-medium text-lg text-gray-800">Luật sư gần bạn</h3>
-          <p className="text-gray-600 text-sm">Chọn một luật sư trên bản đồ để xem thông tin chi tiết</p>
+        <div className='p-4'>
+          <h3 className='font-medium text-lg text-gray-800'>Luật sư gần bạn</h3>
+          <p className='text-gray-600 text-sm'>Chọn một luật sư trên bản đồ để xem thông tin chi tiết</p>
         </div>
 
-        <div className="flex flex-row h-[500px]">
+        <div className='flex flex-row h-[500px]'>
           {/* Map Area - Left Side */}
-          <div className="w-1/2 h-full relative">
+          <div className='w-1/2 h-full relative'>
             {loading ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-[#fefff9] z-10">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#fc8e5a]"></div>
+              <div className='absolute inset-0 flex items-center justify-center bg-[#fefff9] z-10'>
+                <div className='animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#fc8e5a]'></div>
               </div>
             ) : (
-              <div className="h-full w-full">
+              <div className='h-full w-full'>
                 <Map posix={center} zoom={13} />
               </div>
             )}
           </div>
 
           {/* Lawyer List - Right Side */}
-          <div className="w-1/2 h-full overflow-y-auto bg-[#f8fafc]">
-            {nearbyLawyers.map(lawyer => (
-              <div 
-                key={lawyer.id} 
-                className={`flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 border-b border-gray-100 ${selectedLawyer?.id === lawyer.id ? 'bg-gray-50' : ''}`}
+          <div className='w-1/2 h-full overflow-y-auto bg-[#f8fafc]'>
+            {nearbyLawyers.map((lawyer) => (
+              <div
+                key={lawyer.id}
+                className={`flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 border-b border-gray-100 ${
+                  selectedLawyer?.id === lawyer.id ? 'bg-gray-50' : ''
+                }`}
                 onClick={() => handleSelectLawyer(lawyer)}
               >
-                <img 
-                  src={lawyer.avatar} 
-                  alt={lawyer.name} 
-                  className="h-12 w-12 rounded-full object-cover" 
-                />
-                <div className="flex-1">
-                  <div className="font-medium text-gray-800">{lawyer.name}</div>
-                  <div className="text-sm text-gray-600">{lawyer.specialty}</div>
+                <img src={lawyer.avatar} alt={lawyer.name} className='h-12 w-12 rounded-full object-cover' />
+                <div className='flex-1'>
+                  <div className='font-medium text-gray-800'>{lawyer.name}</div>
+                  <div className='text-sm text-gray-600'>{lawyer.specialty}</div>
                 </div>
-                <div className="text-right">
-                  <div className="text-sm font-medium text-gray-800">{lawyer.distance} km</div>
-                  <div className="text-xs text-gray-500">{lawyer.estimatedTime} phút</div>
+                <div className='text-right'>
+                  <div className='text-sm font-medium text-gray-800'>{lawyer.distance} km</div>
+                  <div className='text-xs text-gray-500'>{lawyer.estimatedTime} phút</div>
                 </div>
               </div>
             ))}
@@ -164,4 +166,4 @@ const LawyerMap: React.FC<LawyerMapProps> = ({ onSelectLawyer, onClose }) => {
   )
 }
 
-export default LawyerMap 
+export default LawyerMap

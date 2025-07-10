@@ -5,9 +5,10 @@ interface ChatHeaderProps {
   sessionId: string
   showLawyers: boolean
   toggleLawyersPanel: () => void
+  toggleContractPanel: () => void
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, toggleLawyersPanel }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, toggleLawyersPanel, toggleContractPanel }) => {
   return (
     <div className='p-4 border-b border-gray-200 flex items-center justify-between bg-[#fefff9] text-gray-800 flex-shrink-0 font-sans'>
       <div className='flex items-center gap-4'>
@@ -44,6 +45,13 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ toggleSidebar, toggleLawyersPan
             />
           </svg>
           Kết nối luật sư
+        </button>
+
+        <button
+          onClick={toggleContractPanel}
+          className='px-3 py-1.5 bg-[#fc8e5a] text-white hover:bg-[#fc8e5a]/90 rounded-md flex items-center gap-2 text-sm'
+        >
+          Hỗ trợ hợp đồng
         </button>
       </div>
       <div className='flex items-center gap-4'>

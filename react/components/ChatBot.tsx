@@ -10,6 +10,7 @@ import LawyerPopup from './LawyerPopup'
 import { markdownToHTML } from '../utils/markdownUtils'
 import type { Message, ChatHistory, DiagramData } from '../types'
 import { extractDiagramJson } from '../utils/parseUtils'
+import ContractAssistant from './Contract/ContractAssistant'
 
 const ChatBot = () => {
   const [input, setInput] = useState('')
@@ -22,6 +23,7 @@ const ChatBot = () => {
   const [showLawyers, setShowLawyers] = useState<boolean>(false)
   const [diagram, setDiagram] = useState<DiagramData | null>(null)
   const [activeTab, setActiveTab] = useState<'diagram' | 'image' | 'video'>('diagram')
+  const [showContract, setShowContract] = useState(false)
 
   // Tin nhắn chào mừng ban đầu
   const welcomeMessage: Message = {
@@ -50,7 +52,7 @@ const ChatBot = () => {
 
   // Hàm để bắt đầu một cuộc trò chuyện mới
   const startNewChat = () => {
-    setMessages([{...welcomeMessage, timestamp: new Date()}])
+    setMessages([{ ...welcomeMessage, timestamp: new Date() }])
     setDiagram(null)
     setActiveChatId(null)
   }
@@ -144,6 +146,7 @@ const ChatBot = () => {
             sessionId={sessionId}
             showLawyers={showLawyers}
             toggleLawyersPanel={() => setShowLawyers(!showLawyers)}
+            toggleContractPanel={() => setShowContract(true)}
           />
 
           <div className='flex flex-1 overflow-hidden'>
@@ -198,6 +201,9 @@ const ChatBot = () => {
 
             {/* Popup kết nối luật sư */}
             <LawyerPopup isOpen={showLawyers} onClose={() => setShowLawyers(false)} />
+
+            {/* Trợ lý hợp đồng */}
+            <ContractAssistant isOpen={showContract} onClose={() => setShowContract(false)} />
           </div>
         </div>
       </div>
