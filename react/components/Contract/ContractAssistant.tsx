@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ContractUpload from './ContractUpload'
 import PDFViewer from './PDFViewer'
 import { useDispatch } from 'react-redux'
-import { setExtractedTextRedux } from '../../store/slices/extractedSlice' // 👈 dùng tên mới
+import { setExtractedTextRedux } from '../../store/slices/extractedSlice'
 
 interface Props {
   isOpen: boolean
@@ -19,12 +19,11 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
   if (!isOpen) return null
 
   const handleFileProcessed = async (text: string, file: File | null) => {
-    console.log('📝 OCR Text:', text)
-    setExtractedText(text) // tôi cũng muốn nó in ra trong mục nội dung trích xuất extractedText bên dưới phần return nữa chứ
-    dispatch(setExtractedTextRedux(text))
+    setExtractedText(text)
     setUploadedFile(file)
+    dispatch(setExtractedTextRedux(text))
+    console.log('📝 OCR Text:', text)
 
-    // đường dẫn đến API chatbot phân tích hợp đồng
     try {
       const res = await fetch('https://platform.phoai.vn/webhook/chatbotContract', {
         method: 'POST',
@@ -39,19 +38,27 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
       const data = await res.json()
-      console.log('📌 Kết quả phân tích hợp đồng:', data)
+      console.log('📌 Phản hồi từ chatbot:', data)
 
-      if (data?.suggestions && Array.isArray(data.suggestions)) {
-        setWarnings(data.suggestions)
+      // Xử lý 2 trường hợp: phản hồi trực tiếp hoặc được gói trong chuỗi JSON
+      let parsed = data
+      if (typeof data.output === 'string') {
+        try {
+          parsed = JSON.parse(data.output)
+        } catch (err) {
+          console.error('❌ Không thể parse output:', err)
+        }
+      }
+
+      if (parsed?.suggestions && Array.isArray(parsed.suggestions)) {
+        setWarnings(parsed.suggestions)
       } else {
-        console.warn('⚠️ Phản hồi không chứa "suggestions" hợp lệ:', data)
+        console.warn('⚠️ Phản hồi không có "suggestions" hợp lệ:', parsed)
       }
     } catch (err) {
-      console.error('❌ Lỗi gửi OCR tới chatbot:', err)
+      console.error('❌ Lỗi gửi dữ liệu tới chatbot:', err)
     }
   }
-
-  // nhận lại phản hồi từ chatbot và viết vào mục warnings để render bên dưới thành công phản hồi từ chatbot
 
   return (
     <div className='fixed inset-0 z-50 bg-[#fefff9] font-sans flex flex-col h-full'>
@@ -68,13 +75,19 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
 
       {/* Body */}
       <div className='flex flex-1 overflow-hidden'>
-        {/* Left: Compact Notes Section */}
+        {/* Left: Warnings */}
         <div className='w-1/4 border-r p-4 overflow-auto bg-white shadow-sm'>
-          <h3 className='text-lg font-semibold text-gray-800 mb-2'>📝 Các mục cần lưu ý</h3>
+          <h3 className='text-lg font-semibold text-gray-800 mb-3'>📝 Các mục cần lưu ý</h3>
+
           {warnings.length > 0 ? (
-            <ul className='list-disc pl-5 text-sm text-gray-700 space-y-1'>
+            <ul className='space-y-2'>
               {warnings.map((item, idx) => (
-                <li key={idx}>{item}</li>
+                <li
+                  key={idx}
+                  className='text-base text-gray-800 px-3 py-2 rounded-lg bg-gray-50 hover:bg-yellow-100 transition-all duration-200 cursor-pointer shadow-sm'
+                >
+                  {item}
+                </li>
               ))}
             </ul>
           ) : (
@@ -82,21 +95,23 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
           )}
         </div>
 
-        {/* Right: Split PDF Viewer and OCR Output */}
+        {/* Right: PDF Viewer & OCR Output */}
         <div className='flex-1 p-4 grid grid-cols-2 gap-4'>
-          {/* PDF Viewer Section */}
-          <div className='flex flex-col bg-white border rounded shadow-sm h-full min-h-32'>
+          {/* PDF Viewer */}
+          <div className='flex flex-col bg-white border rounded shadow-sm h-full'>
             <h3 className='text-sm font-semibold text-gray-800 p-2 border-b'>Xem trước PDF</h3>
             <div className='flex-1 overflow-auto'>
               <PDFViewer file={uploadedFile} />
             </div>
           </div>
 
-          {/* OCR Output Section */}
-          <div className='flex flex-col bg-white border rounded shadow-sm h-full min-h-32'>
+          {/* OCR Output */}
+          <div className='flex flex-col bg-white border rounded shadow-sm h-full'>
             <h3 className='text-sm font-semibold text-gray-800 p-2 border-b'>Nội dung trích xuất</h3>
             <div className='flex-1 overflow-auto p-2'>
-              <pre className='font-sans text-sm'>{extractedText || 'Vui lòng tải lên hợp đồng để xem nội dung.'}</pre>
+              <pre className='font-sans text-sm whitespace-pre-wrap'>
+                {extractedText || 'Vui lòng tải lên hợp đồng để xem nội dung.'}
+              </pre>
             </div>
           </div>
         </div>
