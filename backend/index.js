@@ -5,9 +5,17 @@ import fetch from "node-fetch";
 const app = express();
 const PORT = 3001;
 
+// app.use(
+//   cors({
+//     origin: ["http://localhost:5173", "https://lawzy-demo.vercel.app"],
+//   })
+// );
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://lawzy-demo.vercel.app"],
+    origin: "*", // ⚠️ Tạm thời mở toàn bộ cho testing, sau nên hạn chế
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 

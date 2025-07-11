@@ -11,6 +11,8 @@ import { markdownToHTML } from '../utils/markdownUtils'
 import type { Message, ChatHistory, DiagramData } from '../types'
 import { extractDiagramJson } from '../utils/parseUtils'
 import ContractAssistant from './Contract/ContractAssistant'
+import { useSelector } from 'react-redux'
+import type { RootState } from '../store'
 
 const ChatBot = () => {
   const [input, setInput] = useState('')
@@ -24,6 +26,9 @@ const ChatBot = () => {
   const [diagram, setDiagram] = useState<DiagramData | null>(null)
   const [activeTab, setActiveTab] = useState<'diagram' | 'image' | 'video'>('diagram')
   const [showContract, setShowContract] = useState(false)
+
+  //
+  const extractedText = useSelector((state: RootState) => state.extracted.text)
 
   // Tin nhắn chào mừng ban đầu
   const welcomeMessage: Message = {
@@ -73,7 +78,7 @@ const ChatBot = () => {
       const res = await fetch('https://lawzy-backend.onrender.com/api/chatbot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input, sessionId })
+        body: JSON.stringify({ message: input, sessionId, context: extractedText })
       })
 
       const data = await res.json()

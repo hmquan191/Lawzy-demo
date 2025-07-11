@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import ContractUpload from './ContractUpload'
 import PDFViewer from './PDFViewer'
+import { useDispatch } from 'react-redux'
+import { setExtractedTextRedux } from '../../store/slices/extractedSlice' // 👈 dùng tên mới
 
 interface Props {
   isOpen: boolean
@@ -8,14 +10,44 @@ interface Props {
 }
 
 const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
+  const dispatch = useDispatch()
+
   const [extractedText, setExtractedText] = useState('')
+  const [warnings, setWarnings] = useState<string[]>([])
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
 
   if (!isOpen) return null
 
-  const handleFileProcessed = (text: string, file: File | null) => {
-    setExtractedText(text)
+  const handleFileProcessed = async (text: string, file: File | null) => {
+    console.log('📝 OCR Text:', text)
+    setExtractedText(text) // tôi cũng muốn nó in ra trong mục nội dung trích xuất extractedText bên dưới phần return nữa chứ
+    dispatch(setExtractedTextRedux(text))
     setUploadedFile(file)
+
+    try {
+      const res = await fetch('https://lawzy-backend.onrender.com/api/chatbot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: '[PHÂN TÍCH HỢP ĐỒNG]',
+          context: text,
+          sessionId: 'contract-analysis'
+        })
+      })
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+
+      const data = await res.json()
+      console.log('📌 Kết quả phân tích hợp đồng:', data)
+
+      if (data?.suggestions && Array.isArray(data.suggestions)) {
+        setWarnings(data.suggestions)
+      } else {
+        console.warn('⚠️ Phản hồi không chứa "suggestions" hợp lệ:', data)
+      }
+    } catch (err) {
+      console.error('❌ Lỗi gửi OCR tới chatbot:', err)
+    }
   }
 
   return (
@@ -36,18 +68,21 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
         {/* Left: Compact Notes Section */}
         <div className='w-1/4 border-r p-4 overflow-auto bg-white shadow-sm'>
           <h3 className='text-lg font-semibold text-gray-800 mb-2'>📝 Các mục cần lưu ý</h3>
-          <ul className='list-disc pl-5 text-sm text-gray-700 space-y-1'>
-            <li>Ví dụ: Mức lương dưới tối thiểu</li>
-            <li>Không có điều khoản bảo hiểm</li>
-            <li>Thiếu ngày công/giờ làm việc rõ ràng</li>
-            <li>Không nêu rõ trách nhiệm pháp lý</li>
-          </ul>
+          {warnings.length > 0 ? (
+            <ul className='list-disc pl-5 text-sm text-gray-700 space-y-1'>
+              {warnings.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className='text-gray-500 text-sm'>Chưa có cảnh báo nào, vui lòng tải hợp đồng.</p>
+          )}
         </div>
 
         {/* Right: Split PDF Viewer and OCR Output */}
         <div className='flex-1 p-4 grid grid-cols-2 gap-4'>
           {/* PDF Viewer Section */}
-          <div className='flex flex-col bg-white border rounded shadow-sm max-h-128 min-h-32'>
+          <div className='flex flex-col bg-white border rounded shadow-sm h-full min-h-32'>
             <h3 className='text-sm font-semibold text-gray-800 p-2 border-b'>Xem trước PDF</h3>
             <div className='flex-1 overflow-auto'>
               <PDFViewer file={uploadedFile} />
@@ -55,12 +90,10 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
           </div>
 
           {/* OCR Output Section */}
-          <div className='flex flex-col bg-white border rounded shadow-sm max-h-128 min-h-32'>
+          <div className='flex flex-col bg-white border rounded shadow-sm h-full min-h-32'>
             <h3 className='text-sm font-semibold text-gray-800 p-2 border-b'>Nội dung trích xuất</h3>
             <div className='flex-1 overflow-auto p-2'>
-              <pre className='whitespace-pre-wrap text-xs text-gray-800'>
-                {extractedText || 'Vui lòng tải lên hợp đồng để xem nội dung.'}
-              </pre>
+              <pre className='font-sans text-sm'>{extractedText || 'Vui lòng tải lên hợp đồng để xem nội dung.'}</pre>
             </div>
           </div>
         </div>
