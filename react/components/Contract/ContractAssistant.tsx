@@ -24,8 +24,9 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
     dispatch(setExtractedTextRedux(text))
     setUploadedFile(file)
 
+    // đường dẫn đến API chatbot phân tích hợp đồng
     try {
-      const res = await fetch('https://lawzy-backend.onrender.com/api/chatbot', {
+      const res = await fetch('https://platform.phoai.vn/webhook/chatbotContract', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -49,6 +50,8 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
       console.error('❌ Lỗi gửi OCR tới chatbot:', err)
     }
   }
+
+  // nhận lại phản hồi từ chatbot và viết vào mục warnings để render bên dưới thành công phản hồi từ chatbot
 
   return (
     <div className='fixed inset-0 z-50 bg-[#fefff9] font-sans flex flex-col h-full'>
