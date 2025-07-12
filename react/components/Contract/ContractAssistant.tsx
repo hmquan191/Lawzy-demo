@@ -98,7 +98,7 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
         {/* Right: PDF Viewer & OCR Output */}
         <div className='flex-1 p-4 grid grid-cols-2 gap-4'>
           {/* PDF Viewer */}
-          <div className='flex flex-col bg-white border rounded shadow-sm h-full'>
+          <div className='flex flex-col bg-white border rounded shadow-sm h-full min-h-32'>
             <h3 className='text-sm font-semibold text-gray-800 p-2 border-b'>Xem trước PDF</h3>
             <div className='flex-1 overflow-auto'>
               <PDFViewer file={uploadedFile} />
@@ -106,7 +106,7 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
           </div>
 
           {/* OCR Output */}
-          <div className='flex flex-col bg-white border rounded shadow-sm h-full'>
+          <div className='flex flex-col bg-white border rounded shadow-sm h-full min-h-32'>
             <h3 className='text-sm font-semibold text-gray-800 p-2 border-b'>Nội dung trích xuất</h3>
             <div className='flex-1 overflow-auto p-2'>
               <pre className='font-sans text-sm whitespace-pre-wrap'>
