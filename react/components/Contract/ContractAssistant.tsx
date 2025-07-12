@@ -29,8 +29,7 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: '[PHÂN TÍCH HỢP ĐỒNG]',
-          context: text,
+          message: text,
           sessionId: 'contract-analysis'
         })
       })
