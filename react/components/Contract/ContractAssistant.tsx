@@ -62,12 +62,15 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
   return (
     <div className='fixed inset-0 z-50 bg-[#fefff9] font-sans flex flex-col h-full'>
       {/* Header */}
-      <div className='p-4 border-b bg-[#fefff9] flex justify-between items-center'>
-        <h1 className='text-2xl font-semibold text-gray-800'>Trợ lý hợp đồng</h1>
-        <div className='flex items-center gap-4'>
+      <div className='p-4 border-b bg-white flex justify-between items-center shadow-sm'>
+        <h1 className='text-2xl font-bold text-gray-900'>📘 Trợ lý hợp đồng – Lawzy</h1>
+        <div className='flex items-center gap-3'>
           <ContractUpload onFileProcessed={handleFileProcessed} />
-          <button onClick={onClose} className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm'>
-            Quay lại
+          <button
+            onClick={onClose}
+            className='bg-red-600 text-white px-4 py-2 text-sm rounded-md hover:bg-red-700 transition-all'
+          >
+            Đóng
           </button>
         </div>
       </div>
@@ -75,42 +78,44 @@ const ContractAssistant: React.FC<Props> = ({ isOpen, onClose }) => {
       {/* Body */}
       <div className='flex flex-1 overflow-hidden'>
         {/* Left: Warnings */}
-        <div className='w-1/4 border-r p-4 overflow-auto bg-white shadow-sm'>
-          <h3 className='text-lg font-semibold text-gray-800 mb-3'>📝 Các mục cần lưu ý</h3>
+        <div className='w-1/4 border-r p-4 overflow-auto bg-gray-50 shadow-inner'>
+          <h3 className='text-xl font-semibold text-gray-900 mb-4'>🛡️ Các mục cần lưu ý</h3>
 
           {warnings.length > 0 ? (
-            <ul className='space-y-2'>
+            <ul className='space-y-3'>
               {warnings.map((item, idx) => (
                 <li
                   key={idx}
-                  className='text-base text-gray-800 px-3 py-2 rounded-lg bg-gray-50 hover:bg-yellow-100 transition-all duration-200 cursor-pointer shadow-sm'
+                  className='bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-800 shadow-sm hover:shadow-md hover:border-blue-500 transition-all duration-200 cursor-pointer'
                 >
                   {item}
                 </li>
               ))}
             </ul>
           ) : (
-            <p className='text-gray-500 text-sm'>Chưa có cảnh báo nào, vui lòng tải hợp đồng.</p>
+            <p className='text-gray-500 text-sm'>📄 Vui lòng tải hợp đồng để được phân tích và gợi ý.</p>
           )}
         </div>
 
         {/* Right: PDF Viewer & OCR Output */}
-        <div className='flex-1 p-4 grid grid-cols-2 gap-4'>
+        <div className='flex-1 p-6 grid grid-cols-2 gap-6 bg-gray-50'>
           {/* PDF Viewer */}
-          <div className='flex flex-col bg-white border rounded shadow-sm h-full min-h-32'>
-            <h3 className='text-sm font-semibold text-gray-800 p-2 border-b'>Xem trước PDF</h3>
+          <div className='flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden'>
+            <div className='px-4 py-2 border-b border-gray-100 bg-gray-100'>
+              <h3 className='text-sm font-semibold text-gray-700'>📄 Xem trước PDF</h3>
+            </div>
             <div className='flex-1 overflow-auto'>
               <PDFViewer file={uploadedFile} />
             </div>
           </div>
 
           {/* OCR Output */}
-          <div className='flex flex-col bg-white border rounded shadow-sm h-full min-h-32'>
-            <h3 className='text-sm font-semibold text-gray-800 p-2 border-b'>Nội dung trích xuất</h3>
-            <div className='flex-1 overflow-auto p-2'>
-              <pre className='font-sans text-sm whitespace-pre-wrap'>
-                {extractedText || 'Vui lòng tải lên hợp đồng để xem nội dung.'}
-              </pre>
+          <div className='flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden'>
+            <div className='px-4 py-2 border-b border-gray-100 bg-gray-100'>
+              <h3 className='text-sm font-semibold text-gray-700'>🔎 Nội dung trích xuất</h3>
+            </div>
+            <div className='flex-1 overflow-auto p-4 bg-white text-sm text-gray-800 whitespace-pre-wrap font-mono'>
+              {extractedText || '⏳ Vui lòng tải hợp đồng để xem nội dung.'}
             </div>
           </div>
         </div>

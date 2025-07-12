@@ -60,6 +60,14 @@ const ContractUpload: React.FC<Props> = ({ onFileProcessed }) => {
     const file = e.target.files?.[0]
     if (!file) return
 
+    const maxSizeMB = 2
+    const maxSizeBytes = maxSizeMB * 1024 * 1024
+
+    if (file.size > maxSizeBytes) {
+      onFileProcessed(`❌ Dung lượng file vượt quá ${maxSizeMB}MB. Vui lòng chọn file nhỏ hơn.`, null)
+      return
+    }
+
     setLoading(true)
     try {
       if (file.type === 'application/pdf') {
